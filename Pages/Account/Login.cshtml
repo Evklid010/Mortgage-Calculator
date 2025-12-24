@@ -1,0 +1,21 @@
+﻿@page
+@model WebApplication1.Pages.Account.LoginModel
+
+<h1>Вход</h1>
+
+<form method="post">
+    <label>Логин</label><br />
+    <input asp-for="Username" required /><br /><br />
+
+    <label>Пароль</label><br />
+    <input type="password" asp-for="Password" required /><br /><br />
+
+    <button type="submit">Войти</button>
+</form>
+
+<p>Нет аккаунта? <a asp-page="/Account/Register">Зарегистрироваться</a></p>
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
+}

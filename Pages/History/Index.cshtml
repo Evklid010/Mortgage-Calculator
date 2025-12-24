@@ -1,0 +1,64 @@
+﻿@page
+@model WebApplication1.Pages.History.IndexModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "История расчётов";
+}
+
+<h1>История моих расчётов</h1>
+
+@if (Model.Reports.Any())
+{
+    <div class="row">
+        @foreach (var report in Model.Reports)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">@report.ReportName</h5>
+                        <small class="text-muted">ID: @report.Id.ToString().Substring(0, 8)...</small>
+                    </div>
+                    <div class="card-body">
+                        <h6>Входные данные:</h6>
+                        <ul>
+                            <li>Стоимость: @report.PropertyPrice.ToString("N0", new CultureInfo("ru-RU")) ₽</li>
+                            <li>Взнос: @report.DownPayment.ToString("N0", new CultureInfo("ru-RU")) ₽</li>
+                            <li>Ставка: @report.InterestRate.ToString("F2")%</li>
+                            <li>Срок: @report.Years лет</li>
+                            <li>Тип: @(report.PaymentType == "annuity" ? "Аннуитетный" : "Дифференцированный")</li>
+                        </ul>
+
+                        <h6>Результаты:</h6>
+                        <ul>
+                            <li>Ежемесячный платёж: @report.MonthlyPayment.ToString("N0", new CultureInfo("ru-RU")) ₽</li>
+                            <li>Общая сумма: @report.TotalPayment.ToString("N0", new CultureInfo("ru-RU")) ₽</li>
+                            <li>Переплата: @report.Overpayment.ToString("N0", new CultureInfo("ru-RU")) ₽</li>
+                        </ul>
+
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@report.Id">
+                            <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                        </form>
+
+                        <a href="/api/pdf/generate/@report.Id"
+                           class="btn btn-primary btn-sm"
+                           target="_blank">
+                            📄 Скачать PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        У вас пока нет сохранённых расчётов.
+        <a asp-page="/Index">Создайте первый расчёт</a>
+    </div>
+}
+
+<p>
+    <a asp-page="/Index" class="btn btn-primary">Новый расчёт</a>
+</p>

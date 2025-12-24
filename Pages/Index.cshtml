@@ -1,0 +1,48 @@
+@page
+@model WebApplication1.Pages.IndexModel
+@using System.Globalization
+
+<h1>Ипотечный калькулятор</h1>
+
+<form method="post">
+    <label>Стоимость недвижимости</label><br />
+    <input asp-for="Input.PropertyPrice" step="0.01" type="number" /><br /><br />
+
+    <label>Первоначальный взнос</label><br />
+    <input asp-for="Input.DownPayment" step="0.01" type="number" /><br /><br />
+
+    <label>Процентная ставка (%)</label><br />
+    <input asp-for="Input.InterestRate" step="0.01" type="number" /><br /><br />
+
+    <label>Срок кредита (лет)</label><br />
+    <input asp-for="Input.Years" type="number" /><br /><br />
+
+    <label>Тип платежа</label><br />
+    <select asp-for="Input.PaymentType">
+        <option value="annuity">Аннуитетный</option>
+        <option value="diff">Дифференцированный</option>
+    </select>
+    <br /><br />
+
+    <button type="submit">Рассчитать</button>
+    <div class="mt-4">
+        <a asp-page="/History/Index" class="btn btn-outline-primary">📋 Моя история расчётов</a>
+    </div>
+</form>
+
+@if (Model.Result != null)
+{
+    var ru = new CultureInfo("ru-RU");
+
+    <hr />
+    <h2>Результат</h2>
+    <p>Ежемесячный платёж: <b>@Math.Round(Model.Result.MonthlyPayment).ToString("N0", ru) ₽</b></p>
+    <p>Общая сумма выплат: <b>@Math.Round(Model.Result.TotalPayment).ToString("N0", ru) ₽</b></p>
+    <p>Переплата: <b>@Math.Round(Model.Result.Overpayment).ToString("N0", ru) ₽</b></p>
+
+    <div class="mt-3">
+        <p>
+            <a href="/History" class="btn btn-outline-primary">📋 Перейти в историю для скачивания PDF</a>
+        </p>
+    </div>
+}

@@ -1,0 +1,19 @@
+﻿@page
+@model WebApplication1.Pages.Account.RegisterModel
+
+<h1>Регистрация</h1>
+
+<form method="post">
+    <label>Логин</label><br />
+    <input asp-for="Username" required /><br /><br />
+
+    <label>Пароль</label><br />
+    <input type="password" asp-for="Password" required /><br /><br />
+
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
+}
